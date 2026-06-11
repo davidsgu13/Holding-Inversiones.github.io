@@ -1,0 +1,375 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f2f1ed;--card:#fff;--c2:#f7f6f2;--c3:#edebe6;
+  --bd:#dbd7cf;--bd2:#e6e2db;
+  --ink:#1a1a18;--i2:#555248;--i3:#928e86;
+  --G:#155e2e;--Gbg:#f0fdf4;--Gbd:#86efac;
+  --R:#991b1b;--Rbg:#fef2f2;--Rbd:#fca5a5;
+  --W:#854d0e;--Wbg:#fefce8;--Wbd:#fde047;
+  --B:#1e3a5f;--Bbg:#eff6ff;--Bbd:#93c5fd;
+  --P:#5b21b6;--Pbg:#f5f3ff;--Pbd:#c4b5fd;
+  --O:#9a3412;--Obg:#fff7ed;--Obd:#fdba74;
+  --T:#0f766e;--Tbg:#f0fdfa;--Tbd:#5eead4;
+}
+body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:13px;min-height:100vh}
+.hdr{background:var(--ink);color:#fff;padding:0 28px}
+.hdr-t{display:flex;justify-content:space-between;align-items:center;padding:16px 0 8px}
+.hdr-t h1{font-size:19px;font-weight:700;letter-spacing:-.5px}
+.hdr-t p{font-size:11px;color:#888;margin-top:2px}
+.hdr-m{text-align:right;font-size:11px;color:#888;font-family:'IBM Plex Mono',monospace;line-height:1.6}
+.hdr-m b{color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);background:var(--card);border-bottom:2px solid var(--bd)}
+.kpi{padding:12px 16px;border-right:1px solid var(--bd)}
+.kpi:last-child{border:none}
+.kl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--i3);margin-bottom:4px}
+.kv{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700}
+.kv.g{color:var(--G)}.kv.r{color:var(--R)}.kv.w{color:var(--W)}.kv.b{color:var(--B)}.kv.t{color:var(--T)}
+.kd{font-size:10px;color:var(--i3);margin-top:2px}
+.tabs{display:flex;background:var(--card);border-bottom:2px solid var(--bd);overflow-x:auto}
+.tab{padding:11px 18px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;color:var(--i3);border-bottom:3px solid transparent;white-space:nowrap;transition:.15s}
+.tab:hover{color:var(--i2)}.tab.on{color:var(--ink);border-color:var(--ink)}
+.pane{display:none;padding:20px 24px;max-width:1000px}
+.pane.on{display:block}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-bottom:16px}
+.box0{margin-bottom:0}
+.bh{background:var(--ink);color:#fff;padding:9px 18px;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.bh em{font-style:normal;font-size:10px;color:#888;font-weight:400;letter-spacing:0;text-transform:none}
+table{width:100%;border-collapse:collapse}
+th{background:var(--c2);padding:7px 16px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--i3);border-bottom:1px solid var(--bd);font-weight:600;text-align:right}
+th:first-child{text-align:left}
+td{padding:8px 16px;border-bottom:1px solid var(--bd2);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.r{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:11px;white-space:nowrap}
+.i1{padding-left:32px;color:var(--i2)}
+.i2{padding-left:48px;color:var(--i3);font-size:11px}
+.rg td{background:var(--c3)!important;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--i3);padding:6px 16px;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+.rsub td{font-weight:600;background:#f1ede8!important;border-top:1px solid var(--bd2)}
+.rtot td{font-weight:700;background:#e5e1db!important;border-top:2px solid var(--bd);font-size:13px}
+.rfin td{font-weight:700;background:var(--ink)!important;color:#fff!important;font-size:13px}
+.rnew td{background:rgba(15,118,110,.04)!important;border-left:3px solid var(--T)}
+.pos{color:var(--G)}.neg{color:var(--R)}.warn{color:var(--W)}.bl{color:var(--B)}.pu{color:var(--P)}.or{color:var(--O)}.te{color:var(--T)}.mu{color:var(--i3)}
+.chip{display:inline-block;padding:2px 7px;border-radius:8px;font-size:9px;font-weight:700;border:1px solid}
+.cg{background:var(--Gbg);color:var(--G);border-color:var(--Gbd)}
+.cw{background:var(--Wbg);color:var(--W);border-color:var(--Wbd)}
+.cb{background:var(--Bbg);color:var(--B);border-color:var(--Bbd)}
+.cp{background:var(--Pbg);color:var(--P);border-color:var(--Pbd)}
+.co{background:var(--Obg);color:var(--O);border-color:var(--Obd)}
+.ct{background:var(--Tbg);color:var(--T);border-color:var(--Tbd)}
+.cr2{background:var(--Rbg);color:var(--R);border-color:var(--Rbd)}
+.chk{display:flex;justify-content:space-between;padding:9px 18px;background:var(--Gbg);border-top:1px dashed var(--Gbd);font-size:11px;color:var(--G);font-weight:600}
+.note{padding:9px 16px;font-size:11px;line-height:1.7;border-top:1px solid}
+.ng{background:var(--Gbg);border-color:var(--Gbd);color:var(--G)}
+.nw{background:var(--Wbg);border-color:var(--Wbd);color:var(--W)}
+.nb{background:var(--Bbg);border-color:var(--Bbd);color:var(--B)}
+.nt{background:var(--Tbg);border-color:var(--Tbd);color:var(--T)}
+.fc{display:flex;justify-content:space-between;align-items:center;padding:8px 18px;border-bottom:1px solid var(--bd2);font-size:13px}
+.fc:last-child{border-bottom:none}
+.fcat{background:var(--c3);padding:6px 18px;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--i3);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);font-weight:600}
+.fsub{display:flex;justify-content:space-between;padding:9px 18px;background:#f1ede8;font-weight:600;font-size:13px;border-top:1px solid var(--bd2)}
+.ftot{display:flex;justify-content:space-between;padding:10px 18px;background:#e5e1db;font-weight:700;font-size:14px;border-top:2px solid var(--bd)}
+.ffin{display:flex;justify-content:space-between;padding:11px 18px;background:var(--ink);color:#fff;font-weight:700;font-size:14px}
+.fi{padding-left:32px;color:var(--i2)}.fi2{padding-left:48px;color:var(--i3);font-size:12px}
+.fv{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600}
+.phones{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-bottom:16px}
+.ph{padding:12px 8px;text-align:center;border-right:1px solid var(--bd);background:var(--card)}
+.ph:last-child{border-right:none}
+.ph-ico{font-size:20px;margin-bottom:4px}
+.ph-mod{font-size:9px;font-weight:700;color:var(--ink);line-height:1.3;margin-bottom:4px}
+.ph-num{font-size:9px;color:var(--i3);font-family:'IBM Plex Mono',monospace;margin-bottom:4px}
+.ph-st{font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px;border:1px solid;display:inline-block;margin-bottom:4px}
+.ph-c{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--i3)}
+.ph-s{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;margin-top:2px}
+.nota{border:1px solid var(--bd);border-radius:6px;overflow:hidden;margin-bottom:10px}
+.nh{background:var(--c2);padding:9px 16px;font-size:11px;font-weight:700;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between}
+.nn{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--i3);margin-right:6px}
+.nb2{padding:10px 16px;font-size:12px;line-height:1.85;color:var(--i2);background:var(--card)}
+.db-g{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.db-c{background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:13px 16px}
+.db-l{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--i3);margin-bottom:5px}
+.db-v{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:700}
+.db-s{font-size:10px;color:var(--i3);margin-top:3px}
+@media(max-width:700px){.kpis{grid-template-columns:repeat(3,1fr)}.g2,.g3{grid-template-columns:1fr}.phones{grid-template-columns:repeat(3,1fr)}.pane{padding:12px}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="hdr-t">
+    <div><h1>📱 Comercializadora iPhones</h1><p>Estados Financieros · Versión Final</p></div>
+    <div class="hdr-m"><b>Período: 13 Abr – 9 Jun 2026</b><br>6 Socios · NIIF Pymes · COP<br>Caja verificada: $5.080.435,51</div>
+  </div>
+</div>
+<div class="kpis">
+  <div class="kpi"><div class="kl">Ventas Totales</div><div class="kv g">$13.010.000</div><div class="kd">5 iPhones vendidos</div></div>
+  <div class="kpi"><div class="kl">Utilidad Neta</div><div class="kv t">$1.901.606</div><div class="kd">Margen 14,6%</div></div>
+  <div class="kpi"><div class="kl">Total Activos</div><div class="kv b">$8.619.606</div><div class="kd">Al 9 Jun 2026</div></div>
+  <div class="kpi"><div class="kl">Patrimonio</div><div class="kv g">$8.219.606</div><div class="kd">Capital + Utilidad</div></div>
+  <div class="kpi"><div class="kl">Caja Final</div><div class="kv b">$5.080.436</div><div class="kd">✓ Verificada</div></div>
+</div>
+<div class="tabs">
+  <div class="tab on" onclick="S('db')">Resumen</div>
+  <div class="tab" onclick="S('bg')">Balance General</div>
+  <div class="tab" onclick="S('er')">Resultados</div>
+  <div class="tab" onclick="S('fe')">Flujo de Caja</div>
+  <div class="tab" onclick="S('inv')">Inventario</div>
+  <div class="tab" onclick="S('no')">Notas</div>
+</div>
+
+<!-- RESUMEN -->
+<div class="pane on" id="tab-db">
+  <div class="db-g">
+    <div class="db-c"><div class="db-l">Utilidad Bruta</div><div class="db-v pos">$1.902.003</div><div class="db-s">Margen 14,6% · 5 iPhones</div></div>
+    <div class="db-c"><div class="db-l">EBIT</div><div class="db-v warn">$1.351.236</div><div class="db-s">Tras gastos logísticos</div></div>
+    <div class="db-c"><div class="db-l">Resultado Financiero</div><div class="db-v te">+$550.370</div><div class="db-s">Intereses + Rendimiento MAMA</div></div>
+    <div class="db-c"><div class="db-l">Utilidad Neta</div><div class="db-v te">$1.901.606</div><div class="db-s">$316.934 por socio · ROI 30,1%</div></div>
+    <div class="db-c"><div class="db-l">CXC Pendiente</div><div class="db-v warn">$1.800.000</div><div class="db-s">iPhone 15 PM #5 · en tránsito</div></div>
+    <div class="db-c"><div class="db-l">Único Pasivo</div><div class="db-v r">$400.000</div><div class="db-s">CXP Traslado USA→COL</div></div>
+  </div>
+  <div class="phones">
+    <div class="ph"><div class="ph-ico">📱</div><div class="ph-mod">iPhone 14 PM 128</div><div class="ph-num">#1</div><div class="ph-st cg">PAGADO ✓</div><div class="ph-c">C: $1.739.170</div><div class="ph-s pos">V: $2.100.000</div></div>
+    <div class="ph"><div class="ph-ico">📱</div><div class="ph-mod">iPhone 14 PM 128</div><div class="ph-num">#2</div><div class="ph-st cp">🇺🇸 USA</div><div class="ph-c">C: $1.739.170</div><div class="ph-s mu">Sin vender</div></div>
+    <div class="ph"><div class="ph-ico">📱</div><div class="ph-mod">iPhone 15 PM 256</div><div class="ph-num">#3</div><div class="ph-st cg">PAGADO ✓</div><div class="ph-c">C: $2.247.402</div><div class="ph-s pos">V: $2.700.000</div></div>
+    <div class="ph"><div class="ph-ico">📱</div><div class="ph-mod">iPhone 15 PM 256</div><div class="ph-num">#4</div><div class="ph-st cg">PAGADO ✓</div><div class="ph-c">C: $2.247.402</div><div class="ph-s pos">V: $2.510.000</div></div>
+    <div class="ph"><div class="ph-ico">📱</div><div class="ph-mod">iPhone 15 PM 256</div><div class="ph-num">#5</div><div class="ph-st cw">CXC $1.8M</div><div class="ph-c">C: $2.247.402</div><div class="ph-s warn">V: $2.700.000</div></div>
+    <div class="ph"><div class="ph-ico">📱</div><div class="ph-mod">iPhone 16 Pro</div><div class="ph-num">#6</div><div class="ph-st cg">PAGADO ✓</div><div class="ph-c">C: $2.626.621</div><div class="ph-s pos">V: $3.000.000</div></div>
+  </div>
+  <div class="box">
+    <div class="bh">Evolución del Negocio <em>Mes 0 → Mes 1 → Final</em></div>
+    <table>
+      <thead><tr><th style="text-align:left">Indicador</th><th>Mes 0 · Inicio</th><th>Mes 1 · 19 May</th><th>Final · 9 Jun</th><th>Δ Total</th></tr></thead>
+      <tbody>
+      <tr><td>Caja</td><td class="r">$1.470.832</td><td class="r">$2.096.832</td><td class="r bl">$5.080.436</td><td class="r pos">+$3.609.604</td></tr>
+      <tr><td>Inventario</td><td class="r">$12.847.168</td><td class="r">$6.233.974</td><td class="r">$1.739.170</td><td class="r neg">−$11.107.998</td></tr>
+      <tr><td>Pasivos</td><td class="r neg">$8.000.000</td><td class="r neg">$4.400.000</td><td class="r neg">$400.000</td><td class="r pos">−$7.600.000</td></tr>
+      <tr><td>Patrimonio</td><td class="r pos">$6.318.000</td><td class="r pos">$6.830.806</td><td class="r pos">$8.219.606</td><td class="r pos">+$1.901.606</td></tr>
+      <tr class="rtot"><td><strong>ROI Acumulado</strong></td><td class="r mu">0%</td><td class="r warn">8,1%</td><td class="r te"><strong>30,1%</strong></td><td class="r te"><strong>+30,1pp</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- BALANCE GENERAL -->
+<div class="pane" id="tab-bg">
+  <div class="g2">
+    <div class="box box0">
+      <div class="bh">ACTIVOS <em>Al 9 Jun 2026</em></div>
+      <table><tbody>
+        <tr class="rg"><td colspan="2">Activo Corriente</td></tr>
+        <tr><td class="i1">Caja y Equivalentes <span class="chip ct">Nota 3</span></td><td class="r bl">$5.080.436</td></tr>
+        <tr><td class="i1">CXC — iPhone 15 PM #5 <span class="chip cw">Nota 4</span></td><td class="r warn">$1.800.000</td></tr>
+        <tr class="rsub"><td><strong>Total Activo Corriente</strong></td><td class="r"><strong>$6.880.436</strong></td></tr>
+        <tr class="rg"><td colspan="2">Inventarios <span style="letter-spacing:0;text-transform:none;color:var(--i3)">Nota 5</span></td></tr>
+        <tr><td class="i1">En tránsito USA — 1× iPhone 14 PM #2</td><td class="r pu">$1.739.170</td></tr>
+        <tr class="rsub"><td><strong>Total Inventarios</strong></td><td class="r"><strong>$1.739.170</strong></td></tr>
+        <tr class="rg"><td colspan="2">Activos Financieros</td></tr>
+        <tr><td class="i1">Inversión MAMA Nicolás <span class="chip cg">Recuperada ✓</span></td><td class="r mu">—</td></tr>
+        <tr class="rfin"><td><strong>TOTAL ACTIVOS</strong></td><td class="r" style="color:#4ade80"><strong>$8.619.606</strong></td></tr>
+      </tbody></table>
+    </div>
+    <div class="box box0">
+      <div class="bh">PASIVOS Y PATRIMONIO</div>
+      <table><tbody>
+        <tr class="rg"><td colspan="2">Pasivo Corriente</td></tr>
+        <tr><td class="i1"><span class="mu" style="text-decoration:line-through">Préstamo Andrés</span> <span class="chip cg">✓ Pagado</span></td><td class="r mu">—</td></tr>
+        <tr><td class="i1"><span class="mu" style="text-decoration:line-through">Préstamo David</span> <span class="chip cg">✓ Pagado</span></td><td class="r mu">—</td></tr>
+        <tr><td class="i1">CXP — Traslado USA→COL <span class="chip co">Nota 6</span></td><td class="r neg"><strong>$400.000</strong></td></tr>
+        <tr class="rsub"><td><strong>Total Pasivos</strong></td><td class="r neg"><strong>$400.000</strong></td></tr>
+        <tr class="rg"><td colspan="2">Patrimonio <span style="letter-spacing:0;text-transform:none;color:var(--i3)">Nota 7</span></td></tr>
+        <tr><td class="i1">Capital — Alejandro P</td><td class="r">$1.053.000</td></tr>
+        <tr><td class="i1">Capital — Angélica</td><td class="r">$1.053.000</td></tr>
+        <tr><td class="i1">Capital — Esteban</td><td class="r">$1.053.000</td></tr>
+        <tr><td class="i1">Capital — Andrés</td><td class="r">$1.053.000</td></tr>
+        <tr><td class="i1">Capital — David</td><td class="r">$1.053.000</td></tr>
+        <tr><td class="i1">Capital — Nicolás</td><td class="r">$1.053.000</td></tr>
+        <tr class="rsub"><td class="i1"><strong>Subtotal Capital</strong></td><td class="r"><strong>$6.318.000</strong></td></tr>
+        <tr><td class="i1">Utilidades Retenidas</td><td class="r mu">$0</td></tr>
+        <tr><td class="i1">Utilidad del Período</td><td class="r pos"><strong>$1.901.606</strong></td></tr>
+        <tr class="rsub"><td><strong>Total Patrimonio</strong></td><td class="r pos"><strong>$8.219.606</strong></td></tr>
+        <tr class="rfin"><td><strong>TOTAL PAS. + PATRIMONIO</strong></td><td class="r" style="color:#4ade80"><strong>$8.619.606</strong></td></tr>
+      </tbody></table>
+      <div class="chk"><span>$8.619.606 = $400.000 + $8.219.606</span><span>✓ CUADRA</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ESTADO DE RESULTADOS -->
+<div class="pane" id="tab-er">
+  <div class="g2">
+    <div class="box box0">
+      <div class="bh">Estado de Resultados <em>13 Abr – 9 Jun 2026</em></div>
+      <table><tbody>
+        <tr class="rg"><td colspan="3">Ingresos Operacionales — 5 unidades</td></tr>
+        <tr><td class="i1">Venta #1 iPhone 14 Pro Max</td><td><span class="chip cg">cobrado ✓</span></td><td class="r pos">$2.100.000</td></tr>
+        <tr><td class="i1">Venta #3 iPhone 15 Pro Max</td><td><span class="chip cg">cobrado ✓</span></td><td class="r pos">$2.700.000</td></tr>
+        <tr><td class="i1">Venta #4 iPhone 15 Pro Max</td><td><span class="chip cg">cobrado ✓</span></td><td class="r pos">$2.510.000</td></tr>
+        <tr><td class="i1">Venta #5 iPhone 15 Pro Max</td><td><span class="chip cw">CXC $1.8M</span></td><td class="r pos">$2.700.000</td></tr>
+        <tr><td class="i1">Venta #6 iPhone 16 Pro</td><td><span class="chip cg">cobrado ✓</span></td><td class="r pos">$3.000.000</td></tr>
+        <tr class="rsub"><td colspan="2"><strong>Total Ventas Netas</strong></td><td class="r pos"><strong>$13.010.000</strong></td></tr>
+        <tr class="rg"><td colspan="3">Costo de Ventas (COGS)</td></tr>
+        <tr><td class="i1">COGS #1 iPhone 14 PM</td><td></td><td class="r neg">($1.739.170)</td></tr>
+        <tr><td class="i1">COGS #3 iPhone 15 PM</td><td></td><td class="r neg">($2.247.402)</td></tr>
+        <tr><td class="i1">COGS #4 iPhone 15 PM</td><td></td><td class="r neg">($2.247.402)</td></tr>
+        <tr><td class="i1">COGS #5 iPhone 15 PM</td><td></td><td class="r neg">($2.247.402)</td></tr>
+        <tr><td class="i1">COGS #6 iPhone 16 Pro</td><td></td><td class="r neg">($2.626.621)</td></tr>
+        <tr class="rsub"><td colspan="2"><strong>Total COGS</strong></td><td class="r neg"><strong>($11.107.997)</strong></td></tr>
+        <tr class="rtot"><td colspan="2"><strong>UTILIDAD BRUTA</strong> <span style="font-size:10px;font-weight:400;color:var(--i3)">Margen 14,6%</span></td><td class="r pos"><strong>$1.902.003</strong></td></tr>
+        <tr class="rg"><td colspan="3">Gastos Operacionales</td></tr>
+        <tr><td class="i1">Flete aeropuerto — recogida equipos</td><td></td><td class="r neg">($140.000)</td></tr>
+        <tr><td class="i1">Traslado USA→COL — 6 iPhones <span class="chip co">CXP</span></td><td></td><td class="r neg">($400.000)</td></tr>
+        <tr><td class="i1">GMF 4×1000</td><td></td><td class="r neg">($10.767)</td></tr>
+        <tr class="rsub"><td colspan="2"><strong>Total Gastos Operacionales</strong></td><td class="r neg"><strong>($550.767)</strong></td></tr>
+        <tr class="rtot"><td colspan="2"><strong>UTILIDAD OPERACIONAL (EBIT)</strong></td><td class="r warn"><strong>$1.351.236</strong></td></tr>
+        <tr class="rg"><td colspan="3">Resultado Financiero</td></tr>
+        <tr class="rnew"><td class="i1">Rendimiento Inversión MAMA Nicolás</td><td></td><td class="r pos">+$794.370</td></tr>
+        <tr><td class="i1">Interés cobrado — Nicolás (3%)</td><td></td><td class="r pos">+$66.000</td></tr>
+        <tr><td class="i1">Interés pagado — Andrés (5%)</td><td></td><td class="r neg">($200.000)</td></tr>
+        <tr><td class="i1">Interés pagado — David (~2,75%)</td><td></td><td class="r neg">($110.000)</td></tr>
+        <tr class="rsub"><td colspan="2"><strong>Resultado Financiero Neto</strong></td><td class="r pos"><strong>+$550.370</strong></td></tr>
+        <tr class="rfin"><td colspan="2"><strong>UTILIDAD NETA DEL PERÍODO</strong></td><td class="r" style="color:#4ade80"><strong>$1.901.606</strong></td></tr>
+      </tbody></table>
+    </div>
+    <div>
+      <div class="box" style="margin-bottom:14px">
+        <div class="bh">Distribución por Socio</div>
+        <table>
+          <thead><tr><th style="text-align:left">Socio</th><th>Aporte</th><th>Utilidad</th><th>ROI</th></tr></thead>
+          <tbody>
+          <tr><td>Alejandro P</td><td class="r">$1.053.000</td><td class="r pos">$316.934</td><td class="r te">30,1%</td></tr>
+          <tr><td>Angélica</td><td class="r">$1.053.000</td><td class="r pos">$316.934</td><td class="r te">30,1%</td></tr>
+          <tr><td>Esteban</td><td class="r">$1.053.000</td><td class="r pos">$316.934</td><td class="r te">30,1%</td></tr>
+          <tr><td>Andrés</td><td class="r">$1.053.000</td><td class="r pos">$316.934</td><td class="r te">30,1%</td></tr>
+          <tr><td>David</td><td class="r">$1.053.000</td><td class="r pos">$316.934</td><td class="r te">30,1%</td></tr>
+          <tr><td>Nicolás</td><td class="r">$1.053.000</td><td class="r pos">$316.936</td><td class="r te">30,1%</td></tr>
+          <tr class="rtot"><td><strong>TOTAL</strong></td><td class="r"><strong>$6.318.000</strong></td><td class="r pos"><strong>$1.901.606</strong></td><td class="r te"><strong>30,1%</strong></td></tr>
+          </tbody>
+        </table>
+        <div class="note nt">📈 ROI de 30,1% en ~8 semanas. Con la venta del iPhone 14 PM #2 pendiente, el ROI del ciclo podría superar el 40%.</div>
+      </div>
+      <div class="box box0">
+        <div class="bh">Margen por Producto</div>
+        <table>
+          <thead><tr><th style="text-align:left">Modelo</th><th>Costo</th><th>Precio Venta</th><th>Margen</th></tr></thead>
+          <tbody>
+          <tr><td>#1 iPhone 14 PM</td><td class="r">$1.739.170</td><td class="r">$2.100.000</td><td class="r pos">20,7%</td></tr>
+          <tr><td>#3 iPhone 15 PM</td><td class="r">$2.247.402</td><td class="r">$2.700.000</td><td class="r pos">20,1%</td></tr>
+          <tr><td>#4 iPhone 15 PM</td><td class="r">$2.247.402</td><td class="r">$2.510.000</td><td class="r pos">11,7%</td></tr>
+          <tr><td>#5 iPhone 15 PM</td><td class="r">$2.247.402</td><td class="r">$2.700.000</td><td class="r pos">20,1%</td></tr>
+          <tr><td>#6 iPhone 16 Pro</td><td class="r">$2.626.621</td><td class="r">$3.000.000</td><td class="r pos">14,2%</td></tr>
+          <tr class="rtot"><td><strong>Promedio</strong></td><td class="r"><strong>$11.107.997</strong></td><td class="r"><strong>$13.010.000</strong></td><td class="r pos"><strong>14,6%</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FLUJO DE EFECTIVO -->
+<div class="pane" id="tab-fe">
+  <div class="box">
+    <div class="bh">Estado de Flujo de Efectivo <em>Método Directo · 13 Abr – 9 Jun 2026</em></div>
+    <div class="fcat">I. ACTIVIDADES DE OPERACIÓN</div>
+    <div class="fc"><span class="fi">Cobros venta #3 iPhone 15 PM</span><span class="fv pos">+$2.700.000</span></div>
+    <div class="fc"><span class="fi">Cobros venta #6 iPhone 16 Pro — cuota 1</span><span class="fv pos">+$1.500.000</span></div>
+    <div class="fc"><span class="fi">Cobros venta #6 iPhone 16 Pro — cuota 2 (CXC)</span><span class="fv pos">+$1.500.000</span></div>
+    <div class="fc"><span class="fi">Cobros venta #1 iPhone 14 PM — cuota 1</span><span class="fv pos">+$100.000</span></div>
+    <div class="fc"><span class="fi">Cobros venta #1 iPhone 14 PM — CXC cobrada</span><span class="fv pos">+$2.000.000</span></div>
+    <div class="fc"><span class="fi">Cobros venta #4 iPhone 15 PM — cuota 1</span><span class="fv pos">+$1.000.000</span></div>
+    <div class="fc"><span class="fi">Cobros venta #4 iPhone 15 PM — CXC cobrada</span><span class="fv pos">+$1.510.000</span></div>
+    <div class="fc"><span class="fi">Cobros venta #5 iPhone 15 PM — anticipo</span><span class="fv pos">+$900.000</span></div>
+    <div class="fc"><span class="fi neg">Pago flete aeropuerto</span><span class="fv neg">($140.000)</span></div>
+    <div class="fc"><span class="fi neg">Pago GMF 4×1000</span><span class="fv neg">($10.767)</span></div>
+    <div class="fc"><span class="fi2">CXP Traslado $400.000 — causado, aún no pagado</span><span class="fv mu">$0</span></div>
+    <div class="fsub"><span><strong>Flujo Neto Operacional</strong></span><span class="fv pos"><strong>+$11.059.233</strong></span></div>
+
+    <div class="fcat">II. ACTIVIDADES DE INVERSIÓN</div>
+    <div class="fc"><span class="fi neg">Compra inventario eBay — 6 iPhones</span><span class="fv neg">($12.847.168)</span></div>
+    <div class="fc"><span class="fi neg">Inversión Financiera MAMA Nicolás</span><span class="fv neg">($900.000)</span></div>
+    <div class="fc"><span class="fi neg">Préstamo otorgado a Nicolás</span><span class="fv neg">($2.200.000)</span></div>
+    <div class="fc"><span class="fi pos">Recuperación préstamo Nicolás + interés 3%</span><span class="fv pos">+$2.266.000</span></div>
+    <div class="fc"><span class="fi pos">Recuperación MAMA Nicolás + rendimiento</span><span class="fv pos">+$1.694.370</span></div>
+    <div class="fsub"><span><strong>Flujo Neto de Inversión</strong></span><span class="fv neg"><strong>($11.986.798)</strong></span></div>
+
+    <div class="fcat">III. ACTIVIDADES DE FINANCIACIÓN</div>
+    <div class="fc"><span class="fi pos">Aportes de capital — 6 socios</span><span class="fv pos">+$6.318.000</span></div>
+    <div class="fc"><span class="fi pos">Ingreso préstamo — Andrés</span><span class="fv pos">+$4.000.000</span></div>
+    <div class="fc"><span class="fi pos">Ingreso préstamo — David</span><span class="fv pos">+$4.000.000</span></div>
+    <div class="fc"><span class="fi neg">Pago préstamo Andrés + intereses 5%</span><span class="fv neg">($4.200.000)</span></div>
+    <div class="fc"><span class="fi neg">Pago préstamo David + intereses $110K</span><span class="fv neg">($4.110.000)</span></div>
+    <div class="fsub"><span><strong>Flujo Neto de Financiación</strong></span><span class="fv pos"><strong>+$6.008.000</strong></span></div>
+
+    <div class="fcat">RECONCILIACIÓN</div>
+    <div class="fc"><span>Flujo operacional</span><span class="fv pos">+$11.059.233</span></div>
+    <div class="fc"><span>Flujo de inversión</span><span class="fv neg">($11.986.798)</span></div>
+    <div class="fc"><span>Flujo de financiación</span><span class="fv pos">+$6.008.000</span></div>
+    <div class="fc"><span>Saldo inicial de caja</span><span class="fv mu">$0</span></div>
+    <div class="ffin"><span><strong>SALDO FINAL DE CAJA</strong></span><span class="fv" style="color:#4ade80"><strong>$5.080.435</strong></span></div>
+    <div class="chk"><span>$11.059.233 − $11.986.798 + $6.008.000 = $5.080.435</span><span>✓ CUADRA</span></div>
+  </div>
+</div>
+
+<!-- INVENTARIO -->
+<div class="pane" id="tab-inv">
+  <div class="box">
+    <div class="bh">Kardex Final — 6 iPhones</div>
+    <table>
+      <thead><tr><th style="text-align:left">Ud.</th><th style="text-align:left">Modelo</th><th>Estado</th><th>Costo</th><th>Precio Vta.</th><th>Margen</th><th>Cobrado</th><th>CXC</th></tr></thead>
+      <tbody>
+      <tr><td class="r mu">#1</td><td>iPhone 14 Pro Max 128</td><td><span class="chip cg">CERRADO ✓</span></td><td class="r">$1.739.170</td><td class="r">$2.100.000</td><td class="r pos">20,7%</td><td class="r pos">$2.100.000</td><td class="r mu">$0</td></tr>
+      <tr><td class="r mu">#2</td><td>iPhone 14 Pro Max 128</td><td><span class="chip cp">🇺🇸 EN USA</span></td><td class="r">$1.739.170</td><td class="r mu">—</td><td class="r mu">—</td><td class="r mu">—</td><td class="r mu">—</td></tr>
+      <tr><td class="r mu">#3</td><td>iPhone 15 Pro Max 256</td><td><span class="chip cg">CERRADO ✓</span></td><td class="r">$2.247.402</td><td class="r">$2.700.000</td><td class="r pos">20,1%</td><td class="r pos">$2.700.000</td><td class="r mu">$0</td></tr>
+      <tr><td class="r mu">#4</td><td>iPhone 15 Pro Max 256</td><td><span class="chip cg">CERRADO ✓</span></td><td class="r">$2.247.402</td><td class="r">$2.510.000</td><td class="r pos">11,7%</td><td class="r pos">$2.510.000</td><td class="r mu">$0</td></tr>
+      <tr><td class="r mu">#5</td><td>iPhone 15 Pro Max 256</td><td><span class="chip cw">VENDIDO/CXC</span></td><td class="r">$2.247.402</td><td class="r">$2.700.000</td><td class="r pos">20,1%</td><td class="r warn">$900.000</td><td class="r warn">$1.800.000</td></tr>
+      <tr><td class="r mu">#6</td><td>iPhone 16 Pro</td><td><span class="chip cg">CERRADO ✓</span></td><td class="r">$2.626.621</td><td class="r">$3.000.000</td><td class="r pos">14,2%</td><td class="r pos">$3.000.000</td><td class="r mu">$0</td></tr>
+      <tr class="rtot"><td colspan="2"><strong>TOTALES</strong></td><td></td><td class="r"><strong>$12.847.167</strong></td><td class="r"><strong>$13.010.000</strong></td><td class="r pos"><strong>14,6%</strong></td><td class="r pos"><strong>$11.210.000</strong></td><td class="r warn"><strong>$1.800.000</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="note nw">⚠ #5 iPhone 15 PM vendido pero aún en tránsito USA. Ingresar a inventario del comprador al momento de entrega. CXC de $1.800.000 se cobra al entregar.</div>
+    <div class="note nt">📦 #2 iPhone 14 PM en tránsito USA — sin comprador asignado aún. Al llegar, disponible para venta estimada en $2.100.000–$2.300.000.</div>
+  </div>
+  <div class="box">
+    <div class="bh">Detalle Compra eBay</div>
+    <table>
+      <thead><tr><th style="text-align:left">Modelo</th><th>Uds.</th><th>USD/ud.</th><th>Tax USD</th><th>Total USD</th><th>TRM</th><th>COP Total</th><th>COP/Ud.</th></tr></thead>
+      <tbody>
+      <tr><td>iPhone 14 Pro Max 128</td><td class="r">2</td><td class="r">$444,86</td><td class="r">$38,93</td><td class="r">$967,57</td><td class="r">3.594,92</td><td class="r">$3.478.340</td><td class="r">$1.739.170</td></tr>
+      <tr><td>iPhone 15 Pro Max 256</td><td class="r">3</td><td class="r">$574,86</td><td class="r">$50,30</td><td class="r">$1.875,48</td><td class="r">3.594,92</td><td class="r">$6.742.206</td><td class="r">$2.247.402</td></tr>
+      <tr><td>iPhone 16 Pro</td><td class="r">1</td><td class="r">$671,86</td><td class="r">$58,79</td><td class="r">$730,65</td><td class="r">3.594,92</td><td class="r">$2.626.621</td><td class="r">$2.626.621</td></tr>
+      <tr class="rtot"><td colspan="6"><strong>TOTAL COMPRA</strong></td><td class="r neg"><strong>$12.847.167</strong></td><td class="r mu">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- NOTAS -->
+<div class="pane" id="tab-no">
+  <div class="nota"><div class="nh"><span><span class="nn">NOTA 1</span>Información General</span></div><div class="nb2">Empresa de comercialización de iPhones importados desde EE.UU. conformada por 6 socios con aporte igualitario de $1.053.000 COP c/u (capital total: $6.318.000 COP). Período cubierto: 13 de abril al 9 de junio de 2026. Actividad: compra en eBay y reventa en Colombia.</div></div>
+  <div class="nota"><div class="nh"><span><span class="nn">NOTA 2</span>Políticas Contables</span></div><div class="nb2"><strong>Base:</strong> NIIF para Pymes. <strong>Moneda:</strong> COP; USD convertidos a TRM de la fecha de operación. <strong>Inventarios:</strong> Costo de adquisición (precio + tax) por unidad específica. <strong>Ingresos:</strong> Reconocidos al momento de transferencia del bien (excepción #5: reconocido por acuerdo de venta aunque pendiente de entrega). <strong>GMF:</strong> Gravamen Movimientos Financieros reconocido como gasto operacional en el período.</div></div>
+  <div class="nota"><div class="nh"><span><span class="nn">NOTA 3</span>Caja y Equivalentes</span><span class="bl">$5.080.436</span></div><div class="nb2">Saldo verificado al 9 de junio de 2026: <strong>$5.080.435,51 COP</strong>. Incluye cobros de ventas, retornos de préstamos e inversiones, neto de pagos de inventario, gastos operativos y cancelación total de deudas (Andrés y David).</div></div>
+  <div class="nota"><div class="nh"><span><span class="nn">NOTA 4</span>CXC — iPhone 15 PM #5</span><span class="warn">$1.800.000</span></div><div class="nb2">El 9 de junio de 2026 se pactó la venta del iPhone 15 Pro Max #5 por $2.700.000. Se recibió anticipo de $900.000. Saldo pendiente: <strong>$1.800.000</strong>, exigible contra entrega del equipo (actualmente en tránsito desde USA). Riesgo: si el equipo no llega en buen estado, la operación podría reversarse.</div></div>
+  <div class="nota"><div class="nh"><span><span class="nn">NOTA 5</span>Inventarios</span><span class="bl">$1.739.170</span></div><div class="nb2">Al 9 de junio de 2026 se mantiene <strong>1 unidad</strong> en inventario:<br>· <strong>iPhone 14 Pro Max 128GB #2</strong> — Costo $1.739.170 — En tránsito desde USA, sin comprador asignado.<br><br>El iPhone 15 PM #5 (en tránsito, vendido) fue dado de baja del inventario al reconocer la venta. Quedará firme al momento de entrega al cliente.</div></div>
+  <div class="nota"><div class="nh"><span><span class="nn">NOTA 6</span>CXP — Traslado USA→COL</span><span class="neg">$400.000</span></div><div class="nb2">Costo causado por traslado e importación de los 6 iPhones desde EE.UU. a Colombia. Pendiente de pago al cierre del período. Al cancelarse: <strong>Db. CXP / Cr. Caja $400.000</strong>.</div></div>
+  <div class="nota"><div class="nh"><span><span class="nn">NOTA 7</span>Patrimonio y Distribución</span><span class="te">$1.901.606</span></div><div class="nb2">Utilidad neta: <strong>$1.901.606 COP</strong>, equivalente a <strong>$316.934 por socio</strong>, representando un ROI de <strong>30,1%</strong> sobre el aporte individual de $1.053.000, en aproximadamente 8 semanas de operación. La distribución es igualitaria entre los 6 socios. No se han decretado dividendos a la fecha.</div></div>
+  <div class="nota"><div class="nh"><span><span class="nn">NOTA 8</span>Inversión MAMA Nicolás — Recuperada</span><span class="pos">$0 saldo</span></div><div class="nb2">El 30 de mayo de 2026 se recibió el retorno de la inversión: <strong>$1.694.370 COP</strong> ($900.000 capital + $794.370 rendimiento). El activo fue liquidado totalmente. El rendimiento de <strong>$794.370</strong> se registró como ingreso financiero en el Estado de Resultados. Rendimiento implícito: 88,3% sobre capital invertido.</div></div>
+  <div class="nota"><div class="nh"><span><span class="nn">NOTA 9</span>Préstamos — Cancelados</span><span class="pos">$0 saldo</span></div><div class="nb2"><strong>Andrés (cancelado 19/05):</strong> $4.000.000 + $200.000 (5%) = $4.200.000 pagados. <strong>David (cancelado 09/06):</strong> $4.000.000 + $110.000 interés implícito = $4.110.000 pagados. Ambas deudas liquidadas. No quedan pasivos financieros con terceros externos.</div></div>
+  <div class="nota"><div class="nh"><span><span class="nn">NOTA 10</span>Eventos Posteriores y Riesgos</span></div><div class="nb2"><strong>iPhone 14 PM #2 en tránsito:</strong> Valor en libros $1.739.170. Al llegar, disponible para venta. Precio objetivo estimado: $2.100.000–$2.300.000 (margen proyectado 21–32%).<br><strong>CXC $1.800.000:</strong> Cobro sujeto a entrega del iPhone 15 PM #5. Riesgo logístico presente.<br><strong>CXP $400.000:</strong> Pago pendiente afectará caja en período siguiente.<br><strong>Riesgo cambiario:</strong> Equipo #2 valorado a TRM $3.594,92. Fluctuaciones podrían afectar márgenes en próximas compras.<br><strong>GMF:</strong> Las transacciones bancarias futuras seguirán generando este gasto. Considerar optimización de movimientos.</div></div>
+</div>
+
+<script>
+const M={db:0,bg:1,er:2,fe:3,inv:4,no:5};
+function S(id){
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  document.querySelectorAll('.tab')[M[id]].classList.add('on');
+}
+</script>
+</body>
+</html>
